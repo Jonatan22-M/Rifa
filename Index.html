@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Rifa</title>
+</head>
+<body>
+    <div class="card">
+        <h2>🎟️ Registro de Rifa</h2>
+        <div class="form-conteiner">
+            <input type="text" id="fullName" placeholder="Nombre Completo">
+            <div class="form-row">
+                <input type="text" id="phone" placeholder="Teléfono (10 Dígitos)" maxlength="10" inputmode="numeric">
+                <input type="number" id="selectedNum" placeholder="N°" readonly>
+            </div> 
+        </div>
+
+          <p class="label">Selecciona un número disponible</p>
+    <div class="number-grid" id="grid"></div>
+
+    <button class="btn btn-primary" id="btnRegister"> Confirmar Registro</button>  
+    </div>
+
+    <div class="card winner-card">
+        <button class="btn btn-ssecondary" id="btnSortear">✨ Realizar Sorteo</button>
+
+        <div class="winner-box" id="winnerBox">
+            <h3 id="sorteoStatus" style="text-align: center; margin-bottom: 20px;">Esperando sorteo...</h3>
+            <div class="podium">
+                <div class="step step-2" id="puesto-2">
+                    <div class="label-podium">2do</div>
+                    <div class="winner-info" id="info-2">?</div>
+                    <div class="base"></div>
+                </div>
+                <div class="step step-1" id="puesto-1">
+                    <div class="label-podium">1ro</div>
+                    <div class="winner-info" id="info-1">?</div>
+                    <div class="base"></div>
+                </div>
+                <div class="step step-3" id="puesto-3">
+                    <div class="label-podium">3ro</div>
+                    <div class="winner-info" id="info-3">?</div>
+                    <div class="base"></div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-danger" id="btnReset">Reiniciar Rifa</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
