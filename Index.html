@@ -3,52 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Rifa</title>
+    <title>Rifa</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --bg: #f3f4f6;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 550px;
+            margin-bottom: 20px;
+        }
+
+        h2 { text-align: center; margin-top: 0; color: #111827; }
+
+        .form-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .form-row { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; }
+
+        input {
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        /* Cuadrícula */
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 6px;
+            margin-bottom: 20px;
+            background: #f9fafb;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .num-btn {
+            aspect-ratio: 1;
+            border: 1px solid #e5e7eb;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+
+        .num-btn:hover:not(.occupied) { background: #e0e7ff; }
+        .num-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
+        .num-btn.occupied { background: var(--danger); color: white; cursor: not-allowed; opacity: 0.7; }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-reg { background: var(--primary); color: white; }
+        .btn-sorteo { background: var(--secondary); color: white; margin-bottom: 15px; }
+        .btn-reset { background: none; color: var(--danger); font-size: 0.8rem; border: 1px solid transparent; }
+        .btn-reset:hover { border-color: var(--danger); }
+
+        /* Estilos del Podio */
+        .winner-box {
+            display: none;
+            text-align: center;
+            border-top: 2px solid #eee;
+            padding-top: 20px;
+        }
+
+        .podium {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 10px;
+            height: 220px;
+            margin-top: 20px;
+        }
+
+        .step {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0.15;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .step.active { opacity: 1; transform: scale(1.05); }
+
+        .base { width: 100%; border-radius: 8px 8px 0 0; }
+        .step-1 .base { height: 110px; background: #ffd700; border: 2px solid #daa520; }
+        .step-2 .base { height: 75px; background: #c0c0c0; border: 2px solid #a9a9a9; }
+        .step-3 .base { height: 45px; background: #cd7f32; border: 2px solid #a0522d; }
+
+        .label-podium { font-weight: bold; margin-bottom: 5px; }
+        .winner-info { font-size: 0.8rem; text-align: center; min-height: 40px; font-weight: bold; line-height: 1.2; }
+    </style>
 </head>
 <body>
+
     <div class="card">
-        <h2>🎟️ Registro de Rifa</h2>
-        <div class="form-conteiner">
+        <h2>🎟️ Registro de Participantes</h2>
+        
+        <div class="form-container">
             <input type="text" id="fullName" placeholder="Nombre Completo">
             <div class="form-row">
-                <input type="text" id="phone" placeholder="Teléfono (10 Dígitos)" maxlength="10" inputmode="numeric">
-                <input type="number" id="selectedNum" placeholder="N°" readonly>
-            </div> 
+                <input type="text" id="phone" placeholder="Teléfono (10 dígitos)" maxlength="10" inputmode="numeric">
+                <input type="text" id="selectedNum" placeholder="N°" readonly style="background: #eee; text-align: center; font-weight: bold;">
+            </div>
         </div>
 
-          <p class="label">Selecciona un número disponible</p>
-    <div class="number-grid" id="grid"></div>
+        <p style="font-size: 0.85rem; color: #666;">Selecciona tu número:</p>
+        <div class="number-grid" id="grid"></div>
 
-    <button class="btn btn-primary" id="btnRegister"> Confirmar Registro</button>  
+        <button class="btn btn-reg" id="btnRegister">Confirmar Registro</button>
     </div>
 
-    <div class="card winner-card">
-        <button class="btn btn-ssecondary" id="btnSortear">✨ Realizar Sorteo</button>
-
+    <div class="card">
+        <button class="btn btn-sorteo" id="btnSortear">✨ Iniciar Gran Sorteo</button>
+        
         <div class="winner-box" id="winnerBox">
-            <h3 id="sorteoStatus" style="text-align: center; margin-bottom: 20px;">Esperando sorteo...</h3>
+            <h3 id="sorteoStatus">¡Listos para ganar!</h3>
             <div class="podium">
                 <div class="step step-2" id="puesto-2">
-                    <div class="label-podium">2do</div>
+                    <div class="label-podium">🥈</div>
                     <div class="winner-info" id="info-2">?</div>
                     <div class="base"></div>
                 </div>
                 <div class="step step-1" id="puesto-1">
-                    <div class="label-podium">1ro</div>
+                    <div class="label-podium">🥇</div>
                     <div class="winner-info" id="info-1">?</div>
                     <div class="base"></div>
                 </div>
                 <div class="step step-3" id="puesto-3">
-                    <div class="label-podium">3ro</div>
+                    <div class="label-podium">🥉</div>
                     <div class="winner-info" id="info-3">?</div>
                     <div class="base"></div>
                 </div>
             </div>
         </div>
-
-        <button class="btn btn-danger" id="btnReset">Reiniciar Rifa</button>
+        
+        <center><button class="btn btn-reset" id="btnReset">Borrar todos los datos</button></center>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        const TOTAL = 100;
+        let db = JSON.parse(localStorage.getItem('rifa_completa')) || {};
+        let numElegido = null;
+
+        const grid = document.getElementById('grid');
+        const inputTel = document.getElementById('phone');
+
+        // VALIDACIÓN: Solo números en el teléfono
+        inputTel.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        function renderGrid() {
+            grid.innerHTML = '';
+            for (let i = 1; i <= TOTAL; i++) {
+                const btn = document.createElement('button');
+                btn.innerText = i;
+                btn.className = 'num-btn' + (db[i] ? ' occupied' : '');
+                
+                btn.onclick = () => {
+                    if (db[i]) {
+                        alert(`❌ ERROR: El número ${i} ya está apartado por ${db[i].nombre}`);
+                        return;
+                    }
+                    document.querySelectorAll('.num-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    numElegido = i;
+                    document.getElementById('selectedNum').value = i;
+                };
+                grid.appendChild(btn);
+            }
+        }
+
+        document.getElementById('btnRegister').onclick = () => {
+            const nombre = document.getElementById('fullName').value.trim();
+            const tel = inputTel.value.trim();
+
+            if (!nombre || tel.length < 10 || !numElegido) {
+                return alert("Por favor llena nombre, teléfono (10 dígitos) y selecciona un número.");
+            }
+
+            db[numElegido] = { nombre, tel };
+            localStorage.setItem('rifa_completa', JSON.stringify(db));
+            
+            alert(`✅ ¡Registro exitoso! Número: ${numElegido}`);
+            location.reload(); // Recargamos para limpiar todo
+        };
+
+        // LÓGICA DEL SORTEO OLÍMPICO
+        document.getElementById('btnSortear').onclick = async function() {
+            const vendidos = Object.keys(db);
+            if (vendidos.length < 3) return alert("Necesitas al menos 3 números vendidos.");
+
+            document.getElementById('winnerBox').style.display = "block";
+            const ganadoresFinales = [];
+            const orden = [3, 2, 1]; // Del 3 al 1 como pediste
+
+            for (let p of orden) {
+                document.getElementById('sorteoStatus').innerText = `Sorteando ${p}er lugar...`;
+                
+                // Elegir uno que no haya ganado ya
+                let candidato;
+                do {
+                    candidato = vendidos[Math.floor(Math.random() * vendidos.length)];
+                } while (ganadoresFinales.includes(candidato));
+                
+                ganadoresFinales.push(candidato);
+
+                // Animación
+                await new Promise(resolve => {
+                    let c = 0;
+                    const info = document.getElementById(`info-${p}`);
+                    const step = document.getElementById(`puesto-${p}`);
+                    const itv = setInterval(() => {
+                        info.innerText = "🎲 " + Math.floor(Math.random() * 100);
+                        c++;
+                        if (c > 20) {
+                            clearInterval(itv);
+                            step.classList.add('active');
+                            info.innerHTML = `${db[candidato].nombre}<br>#${candidato}`;
+                            setTimeout(resolve, 1500);
+                        }
+                    }, 60);
+                });
+            }
+            document.getElementById('sorteoStatus').innerText = "🏆 ¡PODIO COMPLETADO! 🏆";
+        };
+
+        document.getElementById('btnReset').onclick = () => {
+            if(confirm("¿Seguro que quieres borrar todo?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        };
+
+        renderGrid();
+    </script>
 </body>
 </html>
