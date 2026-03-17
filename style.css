@@ -1,0 +1,119 @@
+:root{
+        --primary: #4f46e5;
+        --secondary: #10b981;
+        --danger: #ef4444;
+        --bg: #f3f4f6; 
+}
+
+body{
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        background-color: var(--bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+}
+
+.card{
+        background: white;
+        padding: 25px;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0,05);
+        width: 100%;
+        max-width: 500px;
+        margin-bottom: 20px;
+}
+
+h2 { text-align: center; margin-top: 0; color: #111827; }
+
+.form-container { display: flex; flex-direction: column; gap: 10px; }
+.form-row { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; }
+
+input {
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+}
+
+.label { font-size: 0.9rem; color: #6b7280; margin-bottom: 10px; }
+
+/* Cuadrícula de números */
+.number-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+    margin-bottom: 20px;
+}
+
+.num-btn {
+    aspect-ratio: 1;
+    border: 1px solid #e5e7eb;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.num-btn:hover:not(.occupied) { background: #e0e7ff; }
+.num-btn.selected { background: var(--primary); color: white; }
+.num-btn.occupied { background: var(--danger); color: white; cursor: not-allowed; opacity: 0.7; }
+
+.btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-primary { background: var(--primary); color: white; }
+.btn-secondary { background: var(--secondary); color: white; }
+.btn-danger { background: none; color: var(--danger); margin-top: 20px; font-size: 0.8rem; }
+
+.winner-box {
+    display: none;
+    margin-top: 15px;
+    padding: 20px;
+    border: 2px dashed var(--secondary);
+    border-radius: 12px;
+    background: #f0fdf4;
+    text-align: center;
+}
+
+/* --- Estilos del Podio --- */
+.podium {
+    display: flex;
+    align-items: flex-end; 
+    justify-content: center;
+    gap: 10px;
+    height: 200px;
+    margin-top: 20px;
+}
+
+.step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0.2; 
+    transition: all 0.6s ease-in-out;
+}
+
+.step.active { opacity: 1; transform: scale(1.05); }
+
+.base {
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+}
+
+/* Colores y Alturas */
+.step-1 .base { height: 100px; background: #ffd700; border: 2px solid #daa520; }
+.step-2 .base { height: 70px; background: #c0c0c0; border: 2px solid #a9a9a9; }
+.step-3 .base { height: 45px; background: #cd7f32; border: 2px solid #a0522d; }
+
+.label-podium { font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; }
+.winner-info { font-size: 0.75rem; text-align: center; min-height: 35px; font-weight: bold; }
